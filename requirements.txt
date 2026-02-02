@@ -5,12 +5,14 @@ uvicorn
 # Database
 sqlalchemy
 
-# OCR (CPU-friendly)
+# OCR 
 easyocr
 pillow
+python-multipart
 
-# LLM (CPU)
+# LLM 
 transformers
+sentencepiece
 torch
 
 # Testing
