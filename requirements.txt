@@ -1,0 +1,18 @@
+# API
+fastapi
+uvicorn
+
+# Database
+sqlalchemy
+
+# OCR (CPU-friendly)
+easyocr
+pillow
+
+# LLM (CPU)
+transformers
+torch
+
+# Testing
+pytest
+httpx
