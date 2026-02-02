@@ -11,7 +11,8 @@ import shutil
 from app.db.database import engine, get_db
 from app.db.models import Base, Document
 from app.services.ocr_service import extract_text
-from app.schemas import UploadResponse
+from app.services.llm_service import answer_question  
+from app.schemas import UploadResponse, AskRequest, AskResponse
 
 
 @asynccontextmanager
@@ -28,7 +29,6 @@ app = FastAPI(
 )
 
 
-# Constant for upload directory 
 UPLOAD_DIR = "uploads"
 
 
@@ -102,3 +102,37 @@ async def upload_document(
         document_id=document.id,
         filename=document.filename,
     )
+
+
+@app.post("/ask", response_model=AskResponse)
+async def ask_question(
+    payload: AskRequest,
+    db: Session = Depends(get_db)):
+    """
+    Answer a natural language question about a previously uploaded document.
+    """
+    # Fetch document
+    document = db.query(Document).filter(Document.id == payload.document_id).first()
+    if not document:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Document with id {payload.document_id} not found",
+        )
+
+    # Check for extracted text
+    if not document.extracted_text or document.extracted_text.strip() == "":
+        raise HTTPException(
+            status_code=400,
+            detail="Document has no extracted text",
+        )
+
+    # LLM
+    try:
+        answer = answer_question(document.extracted_text, payload.question)
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"LLM processing failed: {str(e)}",
+        )
+
+    return AskResponse(answer=answer)

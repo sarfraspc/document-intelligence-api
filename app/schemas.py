@@ -1,5 +1,5 @@
 """
-Pydantic schemas for API requests/responses
+Pydantic schemas for API requests/responses.
 """
 
 from pydantic import BaseModel
@@ -10,4 +10,13 @@ class UploadResponse(BaseModel):
     filename: str
 
     class Config:
-        from_attributes = True 
+        from_attributes = True
+
+
+class AskRequest(BaseModel):
+    document_id: int
+    question: str
+
+
+class AskResponse(BaseModel):
+    answer: str
