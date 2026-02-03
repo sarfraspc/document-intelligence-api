@@ -1,5 +1,5 @@
 """
-LLM service layer using google/flan-t5-base for document question answering
+LLM service layer using google/flan-t5-small for document question answering
 """
 
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
@@ -7,7 +7,7 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 # Instruction-tuned for QA
 # - Deterministic generation
 
-model_name = "google/flan-t5-base"
+model_name = "google/flan-t5-small"
 
 # Load once 
 tokenizer = AutoTokenizer.from_pretrained(model_name)
