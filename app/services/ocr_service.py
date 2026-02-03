@@ -1,39 +1,21 @@
 """
-OCR service layer using EasyOCR.
+OCR service layer using tesseract
 """
 
-import easyocr
+import pytesseract
 from pathlib import Path
-from typing import List
-
-# English only
-reader = easyocr.Reader(['en'], gpu=False)
-
+from PIL import Image
 
 def extract_text(image_path):
-    """
-    Args:
-        image_path: Local path to the image file
-    Returns:
-        Extracted text
-    Raises:
-        FileNotFoundError: If the image file does not exist
-        RuntimeError: If OCR processing fails for any other reason
-    """
     path = Path(image_path)
     if not path.exists():
         raise FileNotFoundError(f"Image file not found: {image_path}")
 
     try:
-        # detail=0 returns only text strings
-        # paragraph=True groups lines into logical paragraphs 
-        results: List[str] = reader.readtext(
-            str(path),
-            detail=0,
-            paragraph=True,
-        )
-        # Join paragraphs with double newline for clean separation
-        return "\n\n".join(results).strip()
+        img = Image.open(path)
+        config = r'--oem 3 --psm 6'
+        text = pytesseract.image_to_string(img, lang='eng', config=config)
+        return text.strip()
     except Exception as e:
         raise RuntimeError(f"OCR extraction failed: {str(e)}") from e
 

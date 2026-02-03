@@ -1,20 +1,11 @@
-# API
-fastapi
-uvicorn
-
-# Database
-sqlalchemy
-
-# OCR 
-easyocr
-pillow
-python-multipart
-
-# LLM 
-transformers
-sentencepiece
-torch
-
-# Testing
 pytest
 httpx
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic
+python-multipart
+pytesseract
+pillow
+transformers
+torch --index-url https://download.pytorch.org/whl/cpu

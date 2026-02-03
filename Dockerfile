@@ -5,10 +5,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
+    tesseract-ocr \
+    libtesseract-dev \
+    tesseract-ocr-eng \
     libgl1 \
     libglib2.0-0 \
-    curl \
     && rm -rf /var/lib/apt/lists/*
 
 RUN useradd -m -s /bin/bash appuser
@@ -20,6 +21,8 @@ RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+
+RUN chown -R appuser:appuser /app
 
 RUN mkdir -p uploads && chown -R appuser:appuser uploads
 

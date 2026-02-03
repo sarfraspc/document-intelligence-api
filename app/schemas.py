@@ -2,15 +2,13 @@
 Pydantic schemas for API requests/responses.
 """
 
-from pydantic import BaseModel
-
+from pydantic import BaseModel, ConfigDict
 
 class UploadResponse(BaseModel):
     document_id: int
     filename: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class AskRequest(BaseModel):
